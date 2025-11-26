@@ -6,15 +6,36 @@ metadata:
 spec:
   template:
     spec:
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: ghcr-pull-secret
       containers:
       - name: guidellm
-        image: ghcr.io/vllm-project/guidellm:0.4.0
+        image: ghcr.io/vllm-project/guidellm:latest
         env:
           - name: GUIDELLM_TARGET
-            value: http://localhost:8000
+            value: http://openshift-ai-inference-openshift-default.openshift-ingress.svc.cluster.local/demo-llm/qwen
           - name: GUIDELLM_PROFILE
             value: sweep
           - name: GUIDELLM_MAX_SECONDS
             value: "30"
           - name: GUIDELLM_DATA
             value: "prompt_tokens=256,output_tokens=128"
+          - name: HF_HOME
+            value: /tmp/hf-cache
+          - name: TRANSFORMERS_CACHE
+            value: /tmp/hf-cache
+          - name: XDG_CACHE_HOME
+            value: /tmp
+          - name: GUIDELLM_OUTPUT
+            value: /tmp/results/benchmarks.json
+        volumeMounts:
+          - name: cache
+            mountPath: /tmp/hf-cache
+          - name: results
+            mountPath: /tmp/results
+      volumes:
+        - name: cache
+          emptyDir: {}
+        - name: results
+          emptyDir: {}

@@ -132,6 +132,50 @@ The monitoring stack includes:
 - **LLM Performance Dashboard:** Shows request latency, throughput, token generation rates, and more
 - **Metrics endpoint:** Available at the model server endpoint `/metrics`
 
+## Benchmarking with guidellm
+
+The `guidellm` folder contains a Job to run benchmarks against the LLM service using [guidellm](https://github.com/vllm-project/guidellm).
+
+### Create GitHub Container Registry Pull Secret
+
+The guidellm image is hosted on ghcr.io and requires authentication to pull:
+
+1. **Create a GitHub Personal Access Token (PAT):**
+   - Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) https://github.com/settings/tokens
+
+   - Generate a new token with `read:packages` scope
+   - Copy the token
+
+ 2. **Create these as environment variables:**
+
+   ```bash
+   export GITHUB_USERNAME=<your-username>
+   export GITHUB_PASS=<token>
+
+   ```
+
+3. **Create the pull secret:**
+   ```bash
+   oc create secret docker-registry ghcr-pull-secret \
+     --docker-server=ghcr.io \
+     --docker-username=$GITHUB_USERNAME \
+     --docker-password=$GITHUB_PASS \
+     -n demo-llm
+   ```
+
+### Run the Benchmark
+
+   ```bash
+   oc apply -k guidellm
+   ```
+
+
+### View Benchmark Results
+
+```bash
+oc logs -n demo-llm job/guidellm-benchmark -f
+```
+
 ## Configuration
 
 The deployment is configured with:
