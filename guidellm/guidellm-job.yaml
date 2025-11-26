@@ -20,7 +20,7 @@ spec:
           - name: GUIDELLM_MAX_SECONDS
             value: "30"
           - name: GUIDELLM_DATA
-            value: "prompt_tokens=256,output_tokens=128"
+            value: "/data/shared-prefix-data.jsonl"
           - name: HF_HOME
             value: /tmp/hf-cache
           - name: TRANSFORMERS_CACHE
@@ -32,8 +32,13 @@ spec:
             mountPath: /tmp/hf-cache
           - name: results
             mountPath: /results
+          - name: data
+            mountPath: /data
       volumes:
         - name: cache
           emptyDir: {}
         - name: results
           emptyDir: {}
+        - name: data
+          configMap:
+            name: guidellm-data
