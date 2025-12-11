@@ -88,16 +88,11 @@ oc logs -f job/vllm-multi-turn-benchmark -n demo-llm
 
 > **Grafana**: Observe the **KV Cache Hit Rate** - with round-robin routing, cache hits will be low (~25%) as requests scatter across replicas. Watch **TTFT P95/P99** spike during multi-turn conversations.
 
-#### Scenarios Demonstrated
+#### Scenario Demonstrated
 
-**Scenario A: Multi-Turn Chat (KV Cache Re-use)**
+Multi-Turn Chat (KV Cache Re-use)**
 - Simulates realistic conversations where efficient KV cache re-use is critical
 - With round-robin routing, requests from the same conversation hit different replicas, missing cached prefixes
-
-**Scenario B: Large Prompts (Prefill Bottlenecks)**
-- Seed documents contain 4000+ token code files and research papers
-- First turn latency varies wildly depending on which replica handles it
-- No prefix sharing between replicas
 
 #### Expected vLLM Results
 
@@ -112,6 +107,10 @@ First Turn vs Subsequent Turns (Prefix Caching Indicator):
   Later turns avg:     196.29 ms
   Speedup ratio:         1.79x   <-- Suboptimal cache reuse
 ```
+
+#### vLLM Grafana Dashboard
+
+![vLLM Grafana Dashboard](assets/vllm-grafana.png)
 
 #### Cleanup vLLM
 
@@ -170,6 +169,10 @@ First Turn vs Subsequent Turns (Prefix Caching Indicator):
   Later turns avg:      94.22 ms
   Speedup ratio:         3.84x   <-- Excellent cache reuse
 ```
+
+#### llm-d Grafana Dashboard
+
+![llm-d Grafana Dashboard](assets/llm-d-grafana.png)
 
 #### Why llm-d Performs Better
 
