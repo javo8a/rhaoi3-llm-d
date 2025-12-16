@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: demo-llm
 
 resources:
+  - ../../base
   - serving-runtime.yaml
   - inference-service.yaml
   - pod-monitor.yaml
