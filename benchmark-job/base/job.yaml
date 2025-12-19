@@ -18,6 +18,9 @@ spec:
           image: quay.io/hayesphilip/multi-turn-benchmark:0.0.1
           args:
             - "URL_PLACEHOLDER"
+            - "-t 10"
+            - "-p 2"
+            - "-m 1000"
           resources:
             requests:
               cpu: "500m"
