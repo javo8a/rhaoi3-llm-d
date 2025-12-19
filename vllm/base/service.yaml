@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gpt-oss-vllm-lb
+  name: vllm-lb
 spec:
   type: ClusterIP
   selector:
-    app: isvc.gpt-oss-vllm-predictor
+    app: <patch-me>
   ports:
     - port: 8000
       targetPort: 8000

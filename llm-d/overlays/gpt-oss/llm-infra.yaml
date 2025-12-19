@@ -3,10 +3,14 @@ kind: LLMInferenceService
 metadata:
   name: gpt-oss-20b
   namespace: demo-llm
-  # annotations:
-  #   security.opendatahub.io/enable-auth: "false"
+  annotations:
+    opendatahub.io/hardware-profile-name: gpu-profile
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/model-type: generative
+    openshift.io/display-name: gpt-oss
+    security.opendatahub.io/enable-auth: 'false'
 spec:
-  replicas: 3
+  replicas: 4
   model:
     uri: oci://quay.io/redhat-ai-services/modelcar-catalog:gpt-oss-20b
     name: openai/gpt-oss-20b
@@ -20,10 +24,10 @@ spec:
         env:
           # disable uvicorn access log to reduce log noise
           - name: VLLM_ADDITIONAL_ARGS
-            value: "--disable-uvicorn-access-log"
+            value: "--disable-uvicorn-access-log --max-model-len=100000"
         resources:
           limits:
-            cpu: '4'
+            cpu: '1'
             memory: 16Gi
             nvidia.com/gpu: '1'
           requests:
@@ -37,10 +41,10 @@ spec:
             path: /health
             port: 8000
             scheme: HTTPS
-          initialDelaySeconds: 15
-          timeoutSeconds: 10
-          periodSeconds: 10
-          failureThreshold: 60
+          initialDelaySeconds: 120
+          timeoutSeconds: 30
+          periodSeconds: 30
+          failureThreshold: 5
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu

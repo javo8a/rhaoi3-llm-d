@@ -1,11 +1,11 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: qwen-gptoss-monitor
+  name: vllm-monitor
 spec:
   selector:
     matchLabels:
-      serving.kserve.io/inferenceservice: gpt-oss-20b-vllm
+      serving.kserve.io/inferenceservice: <patch-me>
   podMetricsEndpoints:
     - port: "8000"
       path: /metrics

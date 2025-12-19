@@ -15,4 +15,4 @@ patches:
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/args/0
-        value: "http://qwen-vllm-lb.demo-llm.svc.cluster.local:8000/v1"
+        value: "http://vllm-lb.demo-llm.svc.cluster.local:8000/v1"
